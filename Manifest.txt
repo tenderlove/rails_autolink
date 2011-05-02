@@ -1,0 +1,7 @@
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/rails_autolink
+lib/rails_autolink.rb
+test/test_rails_autolink.rb
