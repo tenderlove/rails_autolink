@@ -1,8 +1,8 @@
 source 'http://rubygems.org'
 
-gem 'rails',     :path => '/Users/aaron/git/rails'
-gem 'arel',      :path => '/Users/aaron/git/arel'
-gem 'rack',      :path => '/Users/aaron/git/rack'
+gem 'rails'
+gem 'arel'
+gem 'rack'
 gem 'hoe'
 gem 'minitest'
 
