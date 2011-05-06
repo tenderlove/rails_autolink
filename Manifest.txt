@@ -1,7 +1,6 @@
-History.txt
+CHANGELOG.rdoc
 Manifest.txt
-README.txt
+README.rdoc
 Rakefile
-bin/rails_autolink
 lib/rails_autolink.rb
 test/test_rails_autolink.rb
