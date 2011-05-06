@@ -13,7 +13,7 @@ Hoe.spec 'rails_autolink' do
   self.readme_file   = 'README.rdoc'
   self.history_file  = 'CHANGELOG.rdoc'
   self.extra_rdoc_files  = FileList['*.rdoc']
-  self.extra_deps       << ['rails', '~> 3.1.0']
+  self.extra_deps       << ['rails', '~> 3.1.0.a']
 end
 
 # vim: syntax=ruby
