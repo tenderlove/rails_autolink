@@ -2,7 +2,7 @@ module RailsAutolink
   VERSION = '1.0.1'
 
   class Railtie < ::Rails::Railtie
-    initializer 'nested_form' do |app|
+    initializer 'rails_autolink' do |app|
       ActiveSupport.on_load(:action_view) do
         require 'active_support/core_ext/object/blank'
         require 'active_support/core_ext/array/extract_options'
