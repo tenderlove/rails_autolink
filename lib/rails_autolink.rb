@@ -86,7 +86,7 @@ module RailsAutolink
                 # is yielded and the result is used as the link text.
                 def auto_link_urls(text, html_options = {}, options = {})
                   link_attributes = html_options.stringify_keys
-                  text.gsub(AUTO_LINK_RE) do
+                  text.to_str.gsub(AUTO_LINK_RE) do
                     scheme, href = $1, $&
                     punctuation = []
 
@@ -103,14 +103,11 @@ module RailsAutolink
                         end
                       end
 
-                      link_text = block_given?? yield(href) : href
+                      link_text = block_given? ? yield(href) : href
                       href = 'http://' + href unless scheme
 
-                      unless options[:sanitize] == false
-                        link_text = sanitize(link_text)
-                        href      = sanitize(href)
-                      end
-                      content_tag(:a, link_text, link_attributes.merge('href' => href), !!options[:sanitize]) + punctuation.reverse.join('')
+                      sanitize = options[:sanitize] != false
+                      content_tag(:a, link_text, link_attributes.merge('href' => href), sanitize) + punctuation.reverse.join('')
                     end
                   end
                 end
@@ -118,18 +115,14 @@ module RailsAutolink
                 # Turns all email addresses into clickable links.  If a block is given,
                 # each email is yielded and the result is used as the link text.
                 def auto_link_email_addresses(text, html_options = {}, options = {})
-                  text.gsub(AUTO_EMAIL_RE) do
+                  text.to_str.gsub(AUTO_EMAIL_RE) do
                     text = $&
 
                     if auto_linked?($`, $')
                       text.html_safe
                     else
-                      display_text = (block_given?) ? yield(text) : text
-
-                      unless options[:sanitize] == false
-                        text         = sanitize(text)
-                        display_text = sanitize(display_text) unless text == display_text
-                      end
+                      display_text = block_given? ? yield(text) : text
+                      display_text = sanitize(display_text) unless options[:sanitize] == false
                       mail_to text, display_text, html_options
                     end
                   end
