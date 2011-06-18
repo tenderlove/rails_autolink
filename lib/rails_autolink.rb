@@ -60,11 +60,12 @@ module RailsAutolink
                   options[:html] = args[1] || {}
                 end
                 options.reverse_merge!(:link => :all, :html => {})
-                text = sanitize(text) unless options[:sanitize] == false
+                sanitize = (options[:sanitize] != false)        
+                text = conditional_sanitize(text, sanitize).to_str
                 case options[:link].to_sym
-                  when :all                         then auto_link_email_addresses(auto_link_urls(text, options[:html], options, &block), options[:html], &block)
-                  when :email_addresses             then auto_link_email_addresses(text, options[:html], &block)
-                  when :urls                        then auto_link_urls(text, options[:html], options, &block)
+                  when :all             then conditional_html_safe(auto_link_email_addresses(auto_link_urls(text, options[:html], options, &block), options[:html], &block), sanitize)
+                  when :email_addresses then conditional_html_safe(auto_link_email_addresses(text, options[:html], &block), sanitize)
+                  when :urls            then conditional_html_safe(auto_link_urls(text, options[:html], options, &block), sanitize)
                 end
               end
 
@@ -139,6 +140,14 @@ module RailsAutolink
                 def auto_linked?(left, right)
                   (left =~ AUTO_LINK_CRE[0] and right =~ AUTO_LINK_CRE[1]) or
                     (left.rindex(AUTO_LINK_CRE[2]) and $' !~ AUTO_LINK_CRE[3])
+                end
+
+                def conditional_sanitize(target, condition)
+                  condition ? sanitize(target) : target
+                end
+
+                def conditional_html_safe(target, condition)
+                  condition ? target.html_safe : target
                 end
             end
           end
