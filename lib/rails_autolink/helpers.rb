@@ -67,7 +67,7 @@ module RailsAutolink
         private
 
           AUTO_LINK_RE = %r{
-              (?: ([0-9A-Za-z+.:-]+:)// | www\. )
+              (?: (['"0-9A-Za-z+.:-]+:)// | www\. )
               [^\s<]+
             }x
 
@@ -77,6 +77,9 @@ module RailsAutolink
           AUTO_EMAIL_RE = /[\w.!#\$%+-]+@[\w-]+(?:\.[\w-]+)+/
 
           BRACKETS = { ']' => '[', ')' => '(', '}' => '{' }
+
+          SURROUNDING_QUOTES_RE = /^("|')(.*)("|')$/
+
 
           # Turns all urls into clickable links.  If a block is given, each url
           # is yielded and the result is used as the link text.
@@ -91,12 +94,19 @@ module RailsAutolink
                 href
               else
                 # don't include trailing punctuation character as part of the URL
-                while href.sub!(/[^\w\/-]$/, '')
+                while href.sub!(/[^'"\w\/-]$/, '')
                   punctuation.push $&
                   if opening = BRACKETS[punctuation.last] and href.scan(opening).size > href.scan(punctuation.last).size
                     href << punctuation.pop
                     break
                   end
+                end
+
+                if href.match SURROUNDING_QUOTES_RE
+                  surrounding = [$1,$3]
+                  href = $2
+                else
+                  surrounding = nil
                 end
 
                 link_text = block_given?? yield(href) : href
@@ -106,6 +116,9 @@ module RailsAutolink
                   link_text = sanitize(link_text)
                   href      = sanitize(href)
                 end
+
+                link_text = surrounding.insert(1,link_text).join if surrounding
+
                 content_tag(:a, link_text, link_attributes.merge('href' => href), !!options[:sanitize]) + punctuation.reverse.join('')
               end
             end

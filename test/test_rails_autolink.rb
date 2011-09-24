@@ -49,6 +49,25 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     assert_equal "{link: #{link3_result}}", auto_link("{link: #{link3_raw}}")
   end
 
+   def test_auto_link_with_surrounding_quotes
+    link3a_raw = '"http://www.example.com"'
+    link3a_result = "<a href=\"http://www.example.com\">\"http://www.example.com\"</a>"
+    assert_equal link3a_result, auto_link(link3a_raw)
+    assert_equal link3a_result, auto_link(link3a_raw, sanitize: false)
+    link3b_raw = "'http://www.example.com'"
+    link3b_result = "<a href=\"http://www.example.com\">'http://www.example.com'</a>"
+    assert_equal link3b_result, auto_link(link3b_raw)
+    assert_equal link3b_result, auto_link(link3b_raw, sanitize: false)
+    link3c_raw = "\"http://www.example.com\""
+    link3c_result = "<a href=\"http://www.example.com\">\"http://www.example.com\"</a>"
+    assert_equal link3c_result, auto_link(link3c_raw)
+    assert_equal link3c_result, auto_link(link3c_raw, sanitize: false)
+    link3d_raw = 'other text with "quotes" and a link "http://www.example.com"'
+    link3d_result = "other text with \"quotes\" and a link <a href=\"http://www.example.com\">\"http://www.example.com\"</a>"
+    assert_equal link3d_result, auto_link(link3d_raw)
+    assert_equal link3d_result, auto_link(link3d_raw, sanitize: false)
+  end
+
   def test_auto_link_with_options_hash
     assert_dom_equal 'Welcome to my new blog at <a href="http://www.myblog.com/" class="menu" target="_blank">http://www.myblog.com/</a>. Please e-mail me at <a href="mailto:me@email.com" class="menu" target="_blank">me@email.com</a>.',
       auto_link("Welcome to my new blog at http://www.myblog.com/. Please e-mail me at me@email.com.",
