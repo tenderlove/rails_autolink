@@ -10,6 +10,8 @@ Hoe.plugin :git     # `gem install hoe-git`
 
 Hoe.spec 'rails_autolink' do
   developer('Aaron Patterson', 'aaron@tenderlovemaking.com')
+  developer('Juanjo Bazan', 'jjbazan@gmail.com')
+  developer('Akira Matsuda', 'ronnie@dio.jp')
   self.readme_file   = 'README.rdoc'
   self.history_file  = 'CHANGELOG.rdoc'
   self.extra_rdoc_files  = FileList['*.rdoc']
