@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = "rails_autolink"
-  s.version = "1.0.3.1.20120124232522"
+  s.version = "1.0.3.1.20120126195637"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Aaron Patterson", "Juanjo Bazan", "Akira Matsuda"]
-  s.date = "2012-01-24"
+  s.date = "2012-01-26"
   s.description = "This is an extraction of the `auto_link` method from rails.  The `auto_link`\nmethod was removed from Rails in version Rails 3.1.  This gem is meant to\nbridge the gap for people migrating."
   s.email = ["aaron@tenderlovemaking.com", "jjbazan@gmail.com", "ronnie@dio.jp"]
   s.extra_rdoc_files = ["Manifest.txt", "CHANGELOG.rdoc", "README.rdoc"]
@@ -23,16 +23,19 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rails>, ["~> 3.2.0"])
+      s.add_runtime_dependency(%q<rails>, ["<= 3.2.0", ">= 3.1"])
+      s.add_development_dependency(%q<minitest>, ["~> 2.11"])
       s.add_development_dependency(%q<rdoc>, ["~> 3.10"])
       s.add_development_dependency(%q<hoe>, ["~> 2.13"])
     else
-      s.add_dependency(%q<rails>, ["~> 3.2.0"])
+      s.add_dependency(%q<rails>, ["<= 3.2.0", ">= 3.1"])
+      s.add_dependency(%q<minitest>, ["~> 2.11"])
       s.add_dependency(%q<rdoc>, ["~> 3.10"])
       s.add_dependency(%q<hoe>, ["~> 2.13"])
     end
   else
-    s.add_dependency(%q<rails>, ["~> 3.2.0"])
+    s.add_dependency(%q<rails>, ["<= 3.2.0", ">= 3.1"])
+    s.add_dependency(%q<minitest>, ["~> 2.11"])
     s.add_dependency(%q<rdoc>, ["~> 3.10"])
     s.add_dependency(%q<hoe>, ["~> 2.13"])
   end
