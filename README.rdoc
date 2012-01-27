@@ -43,7 +43,7 @@ This behaviour can be overriden setting the <tt>:sanitize</tt> option to false
 
 == REQUIREMENTS:
 
-* rails >= 3.1
+* rails ~> 3.1
 
 == INSTALL:
 
