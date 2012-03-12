@@ -13,7 +13,8 @@ module RailsAutolink
         # <tt>:email_addresses</tt>, and <tt>:urls</tt>. If a block is given, each URL and
         # e-mail address is yielded and the result is used as the link text. By default the
         # text given is sanitized, you can override this behaviour setting the
-        # <tt>:sanitize</tt> option to false.
+        # <tt>:sanitize</tt> option to false, or you can add options to the sanitization of 
+        # the text using the <tt>:sanitize_options</tt> option hash.
         #
         # ==== Examples
         #   auto_link("Go to http://www.rubyonrails.org and say hello to david@loudthinking.com")
@@ -55,8 +56,9 @@ module RailsAutolink
             options[:html] = args[1] || {}
           end
           options.reverse_merge!(:link => :all, :html => {})
-          sanitize = (options[:sanitize] != false)        
-          text = conditional_sanitize(text, sanitize).to_str
+          sanitize = (options[:sanitize] != false)
+          sanitize_options = options[:sanitize_options] || {}
+          text = conditional_sanitize(text, sanitize, sanitize_options).to_str
           case options[:link].to_sym
             when :all             then conditional_html_safe(auto_link_email_addresses(auto_link_urls(text, options[:html], options, &block), options[:html], &block), sanitize)
             when :email_addresses then conditional_html_safe(auto_link_email_addresses(text, options[:html], &block), sanitize)
@@ -137,8 +139,8 @@ module RailsAutolink
               (left.rindex(AUTO_LINK_CRE[2]) and $' !~ AUTO_LINK_CRE[3])
           end
 
-          def conditional_sanitize(target, condition)
-            condition ? sanitize(target) : target
+          def conditional_sanitize(target, condition, sanitize_options = {})
+            condition ? sanitize(target, sanitize_options) : target
           end
 
           def conditional_html_safe(target, condition)

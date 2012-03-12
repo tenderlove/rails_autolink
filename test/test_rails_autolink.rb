@@ -88,6 +88,21 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     assert_equal %{<a href="http://www.rubyonrails.com?id=1&num=2">http://www.rubyonrails.com?id=1&num=2</a>}, auto_link("#{link_raw}#{malicious_script}")
     assert auto_link("#{link_raw}#{malicious_script}").html_safe?
   end
+  
+  def test_auto_link_should_sanitize_input_with_sanitize_options
+    link_raw     = %{http://www.rubyonrails.com?id=1&num=2}
+    malicious_script  = '<script>alert("malicious!")</script>'
+    text_with_attributes = %{<a href="http://ruby-lang-org" target="_blank" data-malicious="inject">Ruby</a>}
+    
+    text_result = %{<a class="big" href="http://www.rubyonrails.com?id=1&num=2">http://www.rubyonrails.com?id=1&num=2</a><a href="http://ruby-lang-org" target="_blank">Ruby</a>}
+    assert_equal text_result, auto_link("#{link_raw}#{malicious_script}#{text_with_attributes}",
+                                        :sanitize_options => {:attributes => ["target", "href"]},
+                                        :html => {:class => 'big'})
+    
+    assert auto_link("#{link_raw}#{malicious_script}#{text_with_attributes}",
+                     :sanitize_options => {:attributes => ["target", "href"]},
+                     :html => {:class => 'big'}).html_safe?
+  end
 
   def test_auto_link_should_not_sanitize_input_when_sanitize_option_is_false
     link_raw     = %{http://www.rubyonrails.com?id=1&num=2}
@@ -117,11 +132,13 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     linked3 = %('<a href="http://www.example.com" rel="nofollow">www.example.com</a>')
     linked4 = %('<a href="http://www.example.com"><b>www.example.com</b></a>')
     linked5 = %('<a href="#close">close</a> <a href="http://www.example.com"><b>www.example.com</b></a>')
+    linked6 = %('<a href="#close">close</a> <a href="http://www.example.com" target="_blank" data-ruby="ror"><b>www.example.com</b></a>')
     assert_equal linked1, auto_link(linked1)
     assert_equal linked2, auto_link(linked2)
     assert_equal linked3, auto_link(linked3, :sanitize => false)
     assert_equal linked4, auto_link(linked4)
     assert_equal linked5, auto_link(linked5)
+    assert_equal linked6, auto_link(linked6, :sanitize_options => {:attributes => ["href", "target", "data-ruby"]})
 
     linked_email = %Q(<a href="mailto:david@loudthinking.com">Mail me</a>)
     assert_equal linked_email, auto_link(linked_email)
