@@ -1,3 +1,7 @@
+=== 1.0.6 / 2012-03-12
+
+* Added sanitize_options arg
+
 === 1.0.5 / 2012-01-27
 
 * Update dependency to include rails 3.2.X
