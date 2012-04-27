@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module RailsAutolink
   require 'active_support/core_ext/object/blank'
   require 'active_support/core_ext/array/extract_options'
@@ -80,6 +82,8 @@ module RailsAutolink
 
           BRACKETS = { ']' => '[', ')' => '(', '}' => '{' }
 
+          WORD_PATTERN = RUBY_VERSION < '1.9' ? '\w' : '\p{Word}'
+
           # Turns all urls into clickable links.  If a block is given, each url
           # is yielded and the result is used as the link text.
           def auto_link_urls(text, html_options = {}, options = {})
@@ -93,7 +97,7 @@ module RailsAutolink
                 href
               else
                 # don't include trailing punctuation character as part of the URL
-                while href.sub!(/[^\w\/-]$/, '')
+                while href.sub!(/[^#{WORD_PATTERN}\/-]$/, '')
                   punctuation.push $&
                   if opening = BRACKETS[punctuation.last] and href.scan(opening).size > href.scan(punctuation.last).size
                     href << punctuation.pop
