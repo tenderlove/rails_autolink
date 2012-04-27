@@ -298,6 +298,7 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
       http://connect.oraclecorp.com/search?search[q]=green+france&search[type]=Group
       http://of.openfoundry.org/projects/492/download#4th.Release.3
       http://maps.google.co.uk/maps?f=q&q=the+london+eye&ie=UTF8&ll=51.503373,-0.11939&spn=0.007052,0.012767&z=16&iwloc=A
+      http://около.кола/колокола
     )
 
     urls.each do |url|
