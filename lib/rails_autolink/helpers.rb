@@ -71,7 +71,7 @@ module RailsAutolink
         private
 
           AUTO_LINK_RE = %r{
-              (?: ((?:ed2k|ftp|http|https|irc|mailto|news|gopher|nntp|telnet|webcal|xmpp|callto|feed|svn|urn|aim|rsync|tag|ssh|sftp|rtsp|afs):)// | www\. )
+              (?: ((?:ed2k|ftp|http|https|irc|mailto|news|gopher|nntp|telnet|webcal|xmpp|callto|feed|svn|urn|aim|rsync|tag|ssh|sftp|rtsp|afs|file|z39.50r|chrome|view-source:http):)// | www\. )
               [^\s<]+
             }x
 
