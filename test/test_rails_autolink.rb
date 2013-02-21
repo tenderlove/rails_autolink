@@ -88,17 +88,17 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     assert_equal %{<a href="http://www.rubyonrails.com?id=1&num=2">http://www.rubyonrails.com?id=1&num=2</a>}, auto_link("#{link_raw}#{malicious_script}")
     assert auto_link("#{link_raw}#{malicious_script}").html_safe?
   end
-  
+
   def test_auto_link_should_sanitize_input_with_sanitize_options
     link_raw     = %{http://www.rubyonrails.com?id=1&num=2}
     malicious_script  = '<script>alert("malicious!")</script>'
     text_with_attributes = %{<a href="http://ruby-lang-org" target="_blank" data-malicious="inject">Ruby</a>}
-    
+
     text_result = %{<a class="big" href="http://www.rubyonrails.com?id=1&num=2">http://www.rubyonrails.com?id=1&num=2</a><a href="http://ruby-lang-org" target="_blank">Ruby</a>}
     assert_equal text_result, auto_link("#{link_raw}#{malicious_script}#{text_with_attributes}",
                                         :sanitize_options => {:attributes => ["target", "href"]},
                                         :html => {:class => 'big'})
-    
+
     assert auto_link("#{link_raw}#{malicious_script}#{text_with_attributes}",
                      :sanitize_options => {:attributes => ["target", "href"]},
                      :html => {:class => 'big'}).html_safe?
@@ -107,7 +107,7 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
   def test_auto_link_should_not_sanitize_input_when_sanitize_option_is_false
     link_raw     = %{http://www.rubyonrails.com?id=1&num=2}
     malicious_script  = '<script>alert("malicious!")</script>'
-    
+
     assert_equal %{<a href="http://www.rubyonrails.com?id=1&num=2">http://www.rubyonrails.com?id=1&num=2</a><script>alert("malicious!")</script>}, auto_link("#{link_raw}#{malicious_script}", :sanitize => false)
     assert !auto_link("#{link_raw}#{malicious_script}", :sanitize => false).html_safe?
   end
@@ -156,14 +156,14 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     email_raw         = 'santiago@wyeworks.com'
     link_raw          = 'http://www.rubyonrails.org'
     malicious_script  = '<script>alert("malicious!")</script>'
-    
+
     assert auto_link(nil).html_safe?, 'should be html safe'
     assert auto_link('').html_safe?, 'should be html safe'
     assert auto_link("#{link_raw} #{link_raw} #{link_raw}").html_safe?, 'should be html safe'
     assert auto_link("hello #{email_raw}").html_safe?, 'should be html safe'
     assert auto_link("hello #{email_raw} #{malicious_script}").html_safe?, 'should be html safe'
   end
-  
+
   def test_auto_link_should_not_be_html_safe_when_sanitize_option_false
     email_raw         = 'santiago@wyeworks.com'
     link_raw          = 'http://www.rubyonrails.org'
@@ -177,6 +177,11 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     email_raw    = 'aaron@tenderlovemaking.com'
     email_result = %{<a href="mailto:#{email_raw}">#{email_raw}</a>}
     assert !auto_link_email_addresses(email_result).html_safe?, 'should not be html safe'
+  end
+
+  def test_auto_link_with_bogative_case
+    link_text = "HTTP://youtube.com"
+    assert_equal generate_result(link_text), auto_link(link_text)
   end
 
   def test_auto_link

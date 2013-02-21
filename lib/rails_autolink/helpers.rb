@@ -15,7 +15,7 @@ module RailsAutolink
         # <tt>:email_addresses</tt>, and <tt>:urls</tt>. If a block is given, each URL and
         # e-mail address is yielded and the result is used as the link text. By default the
         # text given is sanitized, you can override this behaviour setting the
-        # <tt>:sanitize</tt> option to false, or you can add options to the sanitization of 
+        # <tt>:sanitize</tt> option to false, or you can add options to the sanitization of
         # the text using the <tt>:sanitize_options</tt> option hash.
         #
         # ==== Examples
@@ -73,7 +73,7 @@ module RailsAutolink
           AUTO_LINK_RE = %r{
               (?: ((?:ed2k|ftp|http|https|irc|mailto|news|gopher|nntp|telnet|webcal|xmpp|callto|feed|svn|urn|aim|rsync|tag|ssh|sftp|rtsp|afs):)// | www\. )
               [^\s<]+
-            }x
+            }ix
 
           # regexps for determining context, used high-volume
           AUTO_LINK_CRE = [/<[^>]+$/, /^[^>]*>/, /<a\b.*?>/i, /<\/a>/i]
