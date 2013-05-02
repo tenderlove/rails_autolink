@@ -1,5 +1,5 @@
 module RailsAutolink
-  VERSION = '1.0.9'
+  VERSION = '1.1.0'
 
   class Railtie < ::Rails::Railtie
     initializer 'rails_autolink' do |app|
