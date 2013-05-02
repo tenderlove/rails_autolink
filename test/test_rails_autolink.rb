@@ -88,17 +88,17 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     assert_equal %{<a href="http://www.rubyonrails.com?id=1&num=2">http://www.rubyonrails.com?id=1&num=2</a>}, auto_link("#{link_raw}#{malicious_script}")
     assert auto_link("#{link_raw}#{malicious_script}").html_safe?
   end
-  
+
   def test_auto_link_should_sanitize_input_with_sanitize_options
     link_raw     = %{http://www.rubyonrails.com?id=1&num=2}
     malicious_script  = '<script>alert("malicious!")</script>'
     text_with_attributes = %{<a href="http://ruby-lang-org" target="_blank" data-malicious="inject">Ruby</a>}
-    
+
     text_result = %{<a class="big" href="http://www.rubyonrails.com?id=1&num=2">http://www.rubyonrails.com?id=1&num=2</a><a href="http://ruby-lang-org" target="_blank">Ruby</a>}
     assert_equal text_result, auto_link("#{link_raw}#{malicious_script}#{text_with_attributes}",
                                         :sanitize_options => {:attributes => ["target", "href"]},
                                         :html => {:class => 'big'})
-    
+
     assert auto_link("#{link_raw}#{malicious_script}#{text_with_attributes}",
                      :sanitize_options => {:attributes => ["target", "href"]},
                      :html => {:class => 'big'}).html_safe?
@@ -107,7 +107,7 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
   def test_auto_link_should_not_sanitize_input_when_sanitize_option_is_false
     link_raw     = %{http://www.rubyonrails.com?id=1&num=2}
     malicious_script  = '<script>alert("malicious!")</script>'
-    
+
     assert_equal %{<a href="http://www.rubyonrails.com?id=1&num=2">http://www.rubyonrails.com?id=1&num=2</a><script>alert("malicious!")</script>}, auto_link("#{link_raw}#{malicious_script}", :sanitize => false)
     assert !auto_link("#{link_raw}#{malicious_script}", :sanitize => false).html_safe?
   end
@@ -116,14 +116,8 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     ftp_raw = 'ftp://example.com/file.txt'
     assert_equal %(Download #{generate_result(ftp_raw)}), auto_link("Download #{ftp_raw}")
 
-    file_scheme   = 'file:///home/username/RomeoAndJuliet.pdf'
-    z39_scheme    = 'z39.50r://host:696/db'
-    chrome_scheme = 'chrome://package/section/path'
-    view_source   = 'view-source:http://en.wikipedia.org/wiki/URI_scheme'
+    file_scheme = 'file:///home/username/RomeoAndJuliet.pdf'
     assert_equal generate_result(file_scheme), auto_link(file_scheme)
-    assert_equal generate_result(z39_scheme), auto_link(z39_scheme)
-    assert_equal generate_result(chrome_scheme), auto_link(chrome_scheme)
-    assert_equal generate_result(view_source), auto_link(view_source)
   end
 
   def test_auto_link_already_linked
@@ -156,14 +150,14 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     email_raw         = 'santiago@wyeworks.com'
     link_raw          = 'http://www.rubyonrails.org'
     malicious_script  = '<script>alert("malicious!")</script>'
-    
+
     assert auto_link(nil).html_safe?, 'should be html safe'
     assert auto_link('').html_safe?, 'should be html safe'
     assert auto_link("#{link_raw} #{link_raw} #{link_raw}").html_safe?, 'should be html safe'
     assert auto_link("hello #{email_raw}").html_safe?, 'should be html safe'
     assert auto_link("hello #{email_raw} #{malicious_script}").html_safe?, 'should be html safe'
   end
-  
+
   def test_auto_link_should_not_be_html_safe_when_sanitize_option_false
     email_raw         = 'santiago@wyeworks.com'
     link_raw          = 'http://www.rubyonrails.org'
@@ -204,11 +198,8 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     email2_raw    = '+david@loudthinking.com'
     email2_result = %{<a href="mailto:#{email2_raw}">#{email2_raw}</a>}
     assert_equal email2_result, auto_link(email2_raw)
-
-    email3_raw    = '+david@loudthinking.com'
-    email3_result = %{<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;+%64%61%76%69%64@%6c%6f%75%64%74%68%69%6e%6b%69%6e%67.%63%6f%6d">#{email3_raw}</a>}
-    assert_equal email3_result, auto_link(email3_raw, :all, :encode => :hex)
-    assert_equal email3_result, auto_link(email3_raw, :email_addresses, :encode => :hex)
+    assert_equal email2_result, auto_link(email2_raw, :all)
+    assert_equal email2_result, auto_link(email2_raw, :email_addresses)
 
     link2_raw    = 'www.rubyonrails.com'
     link2_result = generate_result(link2_raw, "http://#{link2_raw}")
