@@ -173,6 +173,11 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     assert !auto_link_email_addresses(email_result).html_safe?, 'should not be html safe'
   end
 
+  def test_auto_link_with_bogative_case
+    link_text = "HTTP://youtube.com"
+    assert_equal generate_result(link_text), auto_link(link_text)
+  end
+
   def test_auto_link
     email_raw    = 'david@loudthinking.com'
     email_result = %{<a href="mailto:#{email_raw}">#{email_raw}</a>}
