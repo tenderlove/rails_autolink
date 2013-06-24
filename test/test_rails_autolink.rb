@@ -266,6 +266,10 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     with_kcode 'u' do
       assert_equal %(浅草.rbの公式サイトはこちら#{link11_result}), auto_link("浅草.rbの公式サイトはこちら#{link11_raw}")
     end
+
+    link12_raw    = 'http://tools.ietf.org/html/rfc3986'
+    link12_result = generate_result(link12_raw)
+    assert_equal %(<p>#{link12_result} text-after-nonbreaking-space</p>), auto_link("<p>#{link12_raw} text-after-nonbreaking-space</p>")
   end
 
   def test_auto_link_parsing
