@@ -78,7 +78,8 @@ module RailsAutolink
           # regexps for determining context, used high-volume
           AUTO_LINK_CRE = [/<[^>]+$/, /^[^>]*>/, /<a\b.*?>/i, /<\/a>/i]
 
-          AUTO_EMAIL_RE = /[\w.!#\$%+-]+@[\w-]+(?:\.[\w-]+)+/
+          AUTO_EMAIL_LOCAL_RE = /[\w.!#\$%&'*\/=?^`{|}~+-]/
+          AUTO_EMAIL_RE = /[\w.!#\$%+-]\.?(?:#{AUTO_EMAIL_LOCAL_RE}+\.)*#{AUTO_EMAIL_LOCAL_RE}*@[\w-]+(?:\.[\w-]+)+/
 
           BRACKETS = { ']' => '[', ')' => '(', '}' => '{' }
 
