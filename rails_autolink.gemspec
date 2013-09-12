@@ -1,6 +1,9 @@
+require File.expand_path "#{File.dirname(__FILE__)}/lib/rails_autolink/version"
+
 Gem::Specification.new do |s|
   s.name = 'rails_autolink'
-  s.version = '1.1.2'
+  s.version = RailsAutolink::VERSION
+  s.date = Time.now.strftime('%Y-%m-%d')
   s.authors = ['Aaron Patterson', 'Juanjo Bazan', 'Akira Matsuda']
   s.email = 'aaron@tenderlovemaking.com'
   s.homepage = 'https://github.com/tenderlove/rails_autolink'
@@ -9,5 +12,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'rails', '> 3.1'
 
-  s.files = Dir["#{File.dirname(__FILE__)}/**/*"]
+  s.files = Dir.glob("{test,lib/**/*}") + `git ls-files -z`.split("\0")
 end
