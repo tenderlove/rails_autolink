@@ -173,6 +173,14 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     assert !auto_link_email_addresses(email_result).html_safe?, 'should not be html safe'
   end
 
+  def test_auto_link_email_addres_with_especial_chars
+    email_raw    = "and&re$la*+r-a.o'rea=l~ly@tenderlovemaking.com"
+    email_sanitized = "and&amp;re$la*+r-a.o&#39;rea=l~ly@tenderlovemaking.com"
+    email_result = %{<a href="mailto:#{email_raw}">#{email_sanitized}</a>}
+    assert_equal email_result, auto_link(email_raw)
+    assert !auto_link_email_addresses(email_result).html_safe?, 'should not be html safe'
+  end
+
   def test_auto_link
     email_raw    = 'david@loudthinking.com'
     email_result = %{<a href="mailto:#{email_raw}">#{email_raw}</a>}
