@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'rails_autolink'
-  s.version = '1.1.1'
+  s.version = '1.1.2'
   s.authors = ['Aaron Patterson', 'Juanjo Bazan', 'Akira Matsuda']
   s.email = 'aaron@tenderlovemaking.com'
   s.homepage = 'https://github.com/tenderlove/rails_autolink'
