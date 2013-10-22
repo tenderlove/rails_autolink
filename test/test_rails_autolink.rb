@@ -309,6 +309,20 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     end
   end
 
+  def test_auto_link_does_not_timeout_when_parsing_odd_email_input
+    inputs = %w(
+      foo@...................................
+      foo@........................................
+      foo@.............................................
+    )
+
+    inputs.each do |input|
+      Timeout.timeout(0.2) do
+        assert_equal input, auto_link(input)
+      end
+    end
+  end
+
   private
   def generate_result(link_text, href = nil, escape = false)
     href ||= link_text
