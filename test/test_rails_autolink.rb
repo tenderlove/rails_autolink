@@ -138,7 +138,6 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     assert_equal linked_email, auto_link(linked_email)
   end
 
-
   def test_auto_link_at_eol
     url1 = "http://api.rubyonrails.com/Foo.html"
     url2 = "http://www.ruby-doc.org/core/Bar.html"
@@ -278,6 +277,9 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     link12_raw    = 'http://tools.ietf.org/html/rfc3986'
     link12_result = generate_result(link12_raw)
     assert_equal %(<p>#{link12_result} text-after-nonbreaking-space</p>), auto_link("<p>#{link12_raw} text-after-nonbreaking-space</p>")
+
+    link13_raw    = 'HTtP://www.rubyonrails.com'
+    assert_equal generate_result(link13_raw), auto_link(link13_raw)
   end
 
   def test_auto_link_parsing

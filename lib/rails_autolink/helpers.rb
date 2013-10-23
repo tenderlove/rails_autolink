@@ -73,7 +73,7 @@ module RailsAutolink
           AUTO_LINK_RE = %r{
               (?: ((?:ed2k|ftp|http|https|irc|mailto|news|gopher|nntp|telnet|webcal|xmpp|callto|feed|svn|urn|aim|rsync|tag|ssh|sftp|rtsp|afs|file):)// | www\. )
               [^\s<\u00A0]+
-            }x
+            }ix
 
           # regexps for determining context, used high-volume
           AUTO_LINK_CRE = [/<[^>]+$/, /^[^>]*>/, /<a\b.*?>/i, /<\/a>/i]
