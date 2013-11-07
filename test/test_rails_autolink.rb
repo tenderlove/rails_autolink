@@ -16,6 +16,7 @@ require 'active_support/core_ext/string/encoding'
 require 'action_dispatch/testing/assertions'
 require 'action_view/helpers/text_helper'
 require 'action_view/helpers/output_safety_helper'
+require 'timeout'
 
 class TestRailsAutolink < MiniTest::Unit::TestCase
   include ActionView::Helpers::CaptureHelper
