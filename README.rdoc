@@ -11,7 +11,7 @@ bridge the gap for people migrating.
 == FEATURES:
 
 By default auto_link returns sanitized html_safe strings.
-This behaviour can be overriden setting the <tt>:sanitize</tt> option to false
+This behaviour can be overridden by setting the <tt>:sanitize</tt> option to false
 (thus making it insecure if you don't have the content under control).
 
 == SYNOPSIS:
