@@ -312,6 +312,16 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     end
   end
 
+  def test_autolink_with_trailing_equals_on_link
+    url = "http://www.rubyonrails.com/foo.cgi?trailing_equals="
+    assert_equal generate_result(url), auto_link(url)
+  end
+
+  def test_autolink_with_trailing_amp_on_link
+    url = "http://www.rubyonrails.com/foo.cgi?trailing_ampersand=value&"
+    assert_equal generate_result(url), auto_link(url)
+  end
+
   def test_auto_link_does_not_timeout_when_parsing_odd_email_input
     inputs = %w(
       foo@...................................
