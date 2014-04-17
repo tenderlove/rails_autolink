@@ -2,21 +2,16 @@
 
 require "minitest/autorun"
 require "rails"
-require "rails_autolink/helpers"
 require 'erb'
 require 'cgi'
-require 'active_support/core_ext/class/attribute_accessors'
+require 'active_support'
+require 'active_support/core_ext'
 require 'action_pack'
-require 'action_view/helpers/capture_helper'
-require 'action_view/helpers/sanitize_helper'
-require 'action_view/helpers/url_helper'
-require 'action_view/helpers/tag_helper'
-require 'active_support/core_ext/module/attribute_accessors'
-require 'active_support/core_ext/string/encoding'
+require 'action_view'
+require 'action_view/helpers'
 require 'action_dispatch/testing/assertions'
-require 'action_view/helpers/text_helper'
-require 'action_view/helpers/output_safety_helper'
 require 'timeout'
+require "rails_autolink/helpers"
 
 class TestRailsAutolink < MiniTest::Unit::TestCase
   include ActionView::Helpers::CaptureHelper
