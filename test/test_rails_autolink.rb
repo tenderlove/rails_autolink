@@ -170,7 +170,12 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
 
   def test_auto_link_email_addres_with_especial_chars
     email_raw    = "and&re$la*+r-a.o'rea=l~ly@tenderlovemaking.com"
-    email_sanitized = "and&amp;re$la*+r-a.o&#39;rea=l~ly@tenderlovemaking.com"
+    email_sanitized = if Rails.version =~ /^3/
+      # mail_to changed the number base it rendered HTML encoded characters at some point
+      "and&amp;re$la*+r-a.o&#x27;rea=l~ly@tenderlovemaking.com"
+    else
+      "and&amp;re$la*+r-a.o&#39;rea=l~ly@tenderlovemaking.com"
+    end
     email_result = %{<a href="mailto:#{email_raw}">#{email_sanitized}</a>}
     assert_equal email_result, auto_link(email_raw)
     assert !auto_link_email_addresses(email_result).html_safe?, 'should not be html safe'
