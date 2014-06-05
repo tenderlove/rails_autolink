@@ -138,6 +138,14 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     assert_equal linked_email, auto_link(linked_email)
   end
 
+  def test_auto_link_with_malicious_attr
+    url1 = "http://api.rubyonrails.com/Foo.html"
+    malicious = "\"onmousemove=\"prompt()"
+    combination = "#{url1}#{malicious}"
+
+    assert_equal %(<p><a href="#{url1}">#{url1}</a>#{malicious}</p>), auto_link("<p>#{combination}</p>")
+  end
+
   def test_auto_link_at_eol
     url1 = "http://api.rubyonrails.com/Foo.html"
     url2 = "http://www.ruby-doc.org/core/Bar.html"
