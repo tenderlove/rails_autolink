@@ -1,3 +1,11 @@
+=== 1.1.6 / 2014-06-08
+
+* Fixed a potential XSS vulnerability #47
+* Hold onto trailing = and & characters as part of urls #45
+* Ensure test compatibility with Rails 3.2.x/4.0.x/4.1.x #44
+* Readme typo #41
+* require timeout in tests #40
+
 === 1.1.5 / 2013-10-23
 
 * Improved performance of email regex
