@@ -2,20 +2,16 @@
 
 require "minitest/autorun"
 require "rails"
-require "rails_autolink/helpers"
 require 'erb'
 require 'cgi'
-require 'active_support/core_ext/class/attribute_accessors'
+require 'active_support'
+require 'active_support/core_ext'
 require 'action_pack'
-require 'action_view/helpers/capture_helper'
-require 'action_view/helpers/sanitize_helper'
-require 'action_view/helpers/url_helper'
-require 'action_view/helpers/tag_helper'
-require 'active_support/core_ext/module/attribute_accessors'
-require 'active_support/core_ext/string/encoding'
+require 'action_view'
+require 'action_view/helpers'
 require 'action_dispatch/testing/assertions'
-require 'action_view/helpers/text_helper'
-require 'action_view/helpers/output_safety_helper'
+require 'timeout'
+require "rails_autolink/helpers"
 
 class TestRailsAutolink < MiniTest::Unit::TestCase
   include ActionView::Helpers::CaptureHelper
@@ -174,7 +170,12 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
 
   def test_auto_link_email_addres_with_especial_chars
     email_raw    = "and&re$la*+r-a.o'rea=l~ly@tenderlovemaking.com"
-    email_sanitized = "and&amp;re$la*+r-a.o&#39;rea=l~ly@tenderlovemaking.com"
+    email_sanitized = if Rails.version =~ /^3/
+      # mail_to changed the number base it rendered HTML encoded characters at some point
+      "and&amp;re$la*+r-a.o&#x27;rea=l~ly@tenderlovemaking.com"
+    else
+      "and&amp;re$la*+r-a.o&#39;rea=l~ly@tenderlovemaking.com"
+    end
     email_result = %{<a href="mailto:#{email_raw}">#{email_sanitized}</a>}
     assert_equal email_result, auto_link(email_raw)
     assert !auto_link_email_addresses(email_result).html_safe?, 'should not be html safe'
@@ -309,6 +310,16 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     urls.each do |url|
       assert_equal generate_result(url), auto_link(url)
     end
+  end
+
+  def test_autolink_with_trailing_equals_on_link
+    url = "http://www.rubyonrails.com/foo.cgi?trailing_equals="
+    assert_equal generate_result(url), auto_link(url)
+  end
+
+  def test_autolink_with_trailing_amp_on_link
+    url = "http://www.rubyonrails.com/foo.cgi?trailing_ampersand=value&"
+    assert_equal generate_result(url), auto_link(url)
   end
 
   def test_auto_link_does_not_timeout_when_parsing_odd_email_input
