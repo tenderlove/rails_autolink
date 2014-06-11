@@ -13,7 +13,7 @@ require 'action_dispatch/testing/assertions'
 require 'timeout'
 require "rails_autolink/helpers"
 
-class TestRailsAutolink < MiniTest::Unit::TestCase
+class TestRailsAutolink < Minitest::Test
   include ActionView::Helpers::CaptureHelper
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::SanitizeHelper
