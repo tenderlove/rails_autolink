@@ -20,7 +20,8 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::UrlHelper
   include ActionView::Helpers::OutputSafetyHelper
-  include ActionDispatch::Assertions::DomAssertions
+  
+
 
   def test_auto_link_within_tags
     link_raw    = 'http://www.rubyonrails.org/images/rails.png'
@@ -343,8 +344,17 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
       end
     end
   end
+  
+  def test_autolink_with_videos
+    video_url = "https://www.youtube.com/watch?v=F-t74UHvrPs"
+    text = " youtube.com www.youtube.com text"
+    assert_equal generate_video_result(video_url, text), auto_link(video_url + text, :link => :videos)
+  end
+
+  
 
   private
+
   def generate_result(link_text, href = nil, escape = false)
     href ||= link_text
     if escape
@@ -354,6 +364,11 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     end
   end
 
+  def generate_video_result(video_url, text)
+    video_regex = /(?:https?:\/\/)?(?:www\.)?youtu(?:\.be|be\.com)\/(?:watch\?v=)?([\w-]{10,})/
+    embed = video_url.gsub(VIDEO_REGEX, "https://www.youtube.com/embed/#{$1}")
+    %{<iframe class="embedded_video" src="#{CGI::escapeHTML embed}"></iframe> #{CGI::escapeHTML text}}
+  end
   # from ruby core
   def build_message(head, template=nil, *arguments)
     template &&= template.chomp

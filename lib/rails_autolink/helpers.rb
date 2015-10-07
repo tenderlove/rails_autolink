@@ -65,6 +65,7 @@ module RailsAutolink
             when :all             then conditional_html_safe(auto_link_email_addresses(auto_link_urls(text, options[:html], options, &block), options[:html], &block), sanitize)
             when :email_addresses then conditional_html_safe(auto_link_email_addresses(text, options[:html], &block), sanitize)
             when :urls            then conditional_html_safe(auto_link_urls(text, options[:html], options, &block), sanitize)
+            when :videos          then conditional_html_safe(auto_link_videos(text, options[:html], options, &block), sanitize)
           end
         end
 
@@ -80,6 +81,7 @@ module RailsAutolink
 
           AUTO_EMAIL_LOCAL_RE = /[\w.!#\$%&'*\/=?^`{|}~+-]/
           AUTO_EMAIL_RE = /[\w.!#\$%+-]\.?#{AUTO_EMAIL_LOCAL_RE}*@[\w-]+(?:\.[\w-]+)+/
+          VIDEO_RE = /(?:https?:\/\/)?(?:www\.)?youtu(?:\.be|be\.com)\/(?:watch\?v=)?([\w-]{10,})/
 
           BRACKETS = { ']' => '[', ')' => '(', '}' => '{' }
 
@@ -136,6 +138,12 @@ module RailsAutolink
                 mail_to text, display_text, html_options
               end
             end
+          end
+
+          def auto_link_videos(text, html_options = {}, options = {})
+            ERB::Util.html_escape(text).to_str.gsub(VIDEO_RE) {
+              content_tag(:iframe, '', class: 'embedded_video', src: "https://www.youtube.com/embed/#{$1}")
+            }
           end
 
           # Detects already linked context or position in the middle of a tag
