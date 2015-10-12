@@ -20,7 +20,6 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::UrlHelper
   include ActionView::Helpers::OutputSafetyHelper
-  include ActionDispatch::Assertions::DomAssertions
 
   def test_auto_link_within_tags
     link_raw    = 'http://www.rubyonrails.org/images/rails.png'
@@ -342,6 +341,27 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
         assert_equal input, auto_link(input)
       end
     end
+  end
+
+  def test_auto_link_does_not_parse_aww
+    inputs = %w(
+      aw...
+      aww
+      aww.
+      aww..
+      awww...
+      awwww.
+      )
+    inputs.each do |input|
+      Timeout.timeout(0.2) do
+        assert_equal input, auto_link(input)
+      end
+    end
+  end
+
+  def test_auto_link_fails_with_aww
+    input = "aww..."
+    assert_equal generate_result(input), auto_link(input)
   end
 
   private
