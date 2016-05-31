@@ -1,3 +1,7 @@
+=== 1.1.7 / 2016-05-31
+
+* Allow trailing dashes in URLs #52
+
 === 1.1.6 / 2014-06-08
 
 * Fixed a potential XSS vulnerability #47
