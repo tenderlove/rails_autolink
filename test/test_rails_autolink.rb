@@ -331,10 +331,12 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
   end
 
   def test_auto_link_does_not_timeout_when_parsing_odd_email_input
-    inputs = %w(
+    inputs = %W(
       foo@...................................
       foo@........................................
       foo@.............................................
+
+      #{'foo' * 20000}@
     )
 
     inputs.each do |input|
