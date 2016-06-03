@@ -346,6 +346,27 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     end
   end
 
+  def test_auto_link_does_not_parse_aww
+    inputs = %w(
+      aw...
+      aww
+      aww.
+      aww..
+      awww...
+      awwww.
+      )
+    inputs.each do |input|
+      Timeout.timeout(0.2) do
+        assert_equal input, auto_link(input)
+      end
+    end
+  end
+
+  def test_auto_link_fails_with_aww
+    input = "aww..."
+    assert_equal generate_result(input), auto_link(input)
+  end
+
   private
   def generate_result(link_text, href = nil, escape = false)
     href ||= link_text
