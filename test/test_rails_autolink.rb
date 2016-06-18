@@ -330,6 +330,14 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
     assert_equal generate_result(url), auto_link(url)
   end
 
+  def test_autolink_with_trailing_dash_on_link
+    url = "http://www.rubyonrails.com/foo-"
+    assert_equal generate_result(url), auto_link(url)
+
+    expected_result_with_ruby20 = "<a href=\"http://www.rubyonrails.com/foo-\">http://www.rubyonrails.com/foo-</a>"
+    assert_equal expected_result_with_ruby20, auto_link(url)
+  end
+
   def test_auto_link_does_not_timeout_when_parsing_odd_email_input
     inputs = %W(
       foo@...................................
