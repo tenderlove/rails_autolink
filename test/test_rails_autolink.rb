@@ -20,7 +20,7 @@ class TestRailsAutolink < MiniTest::Unit::TestCase
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::UrlHelper
   include ActionView::Helpers::OutputSafetyHelper
-  include ActionDispatch::Assertions::DomAssertions
+  include Rails::Dom::Testing::Assertions
 
   def test_auto_link_within_tags
     link_raw    = 'http://www.rubyonrails.org/images/rails.png'
