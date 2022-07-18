@@ -332,6 +332,28 @@ class TestRailsAutolink < Minitest::Test
     assert_equal generate_result(url), auto_link(url)
   end
 
+  def test_autolink_with_trailing_colon_on_link
+    url = "http://www.rubyonrails.com/foo.cgi?trailing_colon=value:"
+    expected_url = "http://www.rubyonrails.com/foo.cgi?trailing_colon=value"
+
+    assert_equal "#{generate_result(expected_url)}:", auto_link(url)
+  end
+
+  def test_autolink_with_trailing_hyphen_on_link
+    url = "http://www.rubyonrails.com/foo.cgi?trailing_hyphen=value-"
+    assert_equal generate_result(url), auto_link(url)
+  end
+
+  def test_autolink_with_trailing_forward_slash_on_link
+    url = "http://www.rubyonrails.com/foo.cgi?trailing_forward_slash=value/"
+    assert_equal generate_result(url), auto_link(url)
+  end
+
+  def test_autolink_with_trailing_number_on_link
+    url = "http://www.rubyonrails.com/foo.cgi?trailing_number=value3"
+    assert_equal generate_result(url), auto_link(url)
+  end
+
   def test_auto_link_does_not_timeout_when_parsing_odd_email_input
     inputs = %W(
       foo@...................................
