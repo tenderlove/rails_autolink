@@ -350,8 +350,9 @@ class TestRailsAutolink < Minitest::Test
 
   private
   def generate_result(link_text, href = nil)
-    href ||= link_text
-    %{<a href="#{CGI::escapeHTML href}">#{CGI::escapeHTML link_text}</a>}.gsub("&#39;", "'") # ActionView does not escape '
+    text = sanitize(link_text)
+    href = sanitize(href) || text
+    %{<a href="#{href}">#{text}</a>}.gsub("&#39;", "'") # ActionView does not escape '
   end
 
   # from ruby core
