@@ -24,7 +24,7 @@ class TestRailsAutolink < Minitest::Test
 
   def test_auto_link_within_tags
     link_raw    = 'http://www.rubyonrails.org/images/rails.png'
-    link_result = %Q(<img src="#{link_raw}" />)
+    link_result = %Q(<img src="#{link_raw}">)
     assert_equal link_result, auto_link(link_result)
   end
 
@@ -62,7 +62,7 @@ class TestRailsAutolink < Minitest::Test
     url = "http://api.rubyonrails.com/Foo.html"
     email = "fantabulous@shiznadel.ic"
 
-    assert_equal %(<p><a href="#{url}">#{url[0...7]}...</a><br /><a href="mailto:#{email}">#{email[0...7]}...</a><br /></p>), auto_link("<p>#{url}<br />#{email}<br /></p>") { |_url| truncate(_url, :length => 10) }
+    assert_equal %(<p><a href="#{url}">#{url[0...7]}...</a><br><a href="mailto:#{email}">#{email[0...7]}...</a><br></p>), auto_link("<p>#{url}<br>#{email}<br></p>") { |_url| truncate(_url, :length => 10) }
   end
 
   def test_auto_link_with_block_with_html
@@ -81,7 +81,7 @@ class TestRailsAutolink < Minitest::Test
   def test_auto_link_should_sanitize_input_when_sanitize_option_is_not_false
     link_raw     = %{http://www.rubyonrails.com?id=1&num=2}
     malicious_script  = '<script>alert("malicious!")</script>'
-    assert_equal %{<a href="http://www.rubyonrails.com?id=1&num=2">http://www.rubyonrails.com?id=1&num=2</a>}, auto_link("#{link_raw}#{malicious_script}")
+    assert_equal %{<a href="http://www.rubyonrails.com?id=1&amp;num=2alert">http://www.rubyonrails.com?id=1&amp;num=2alert</a>("malicious!")}, auto_link("#{link_raw}#{malicious_script}")
     assert auto_link("#{link_raw}#{malicious_script}").html_safe?
   end
 
@@ -90,7 +90,7 @@ class TestRailsAutolink < Minitest::Test
     malicious_script  = '<script>alert("malicious!")</script>'
     text_with_attributes = %{<a href="http://ruby-lang-org" target="_blank" data-malicious="inject">Ruby</a>}
 
-    text_result = %{<a class="big" href="http://www.rubyonrails.com?id=1&num=2">http://www.rubyonrails.com?id=1&num=2</a><a href="http://ruby-lang-org" target="_blank">Ruby</a>}
+    text_result = %{<a class="big" href="http://www.rubyonrails.com?id=1&amp;num=2alert">http://www.rubyonrails.com?id=1&amp;num=2alert</a>("malicious!")<a href="http://ruby-lang-org" target="_blank">Ruby</a>}
     assert_equal text_result, auto_link("#{link_raw}#{malicious_script}#{text_with_attributes}",
                                         :sanitize_options => {:attributes => ["target", "href"]},
                                         :html => {:class => 'big'})
@@ -146,7 +146,7 @@ class TestRailsAutolink < Minitest::Test
     url1 = "http://api.rubyonrails.com/Foo.html"
     url2 = "http://www.ruby-doc.org/core/Bar.html"
 
-    assert_equal %(<p><a href="#{url1}">#{url1}</a><br /><a href="#{url2}">#{url2}</a><br /></p>), auto_link("<p>#{url1}<br />#{url2}<br /></p>")
+    assert_equal %(<p><a href="#{url1}">#{url1}</a><br><a href="#{url2}">#{url2}</a><br></p>), auto_link("<p>#{url1}<br>#{url2}<br></p>")
   end
 
   def test_auto_link_should_be_html_safe
@@ -177,14 +177,16 @@ class TestRailsAutolink < Minitest::Test
   end
 
   def test_auto_link_email_addres_with_especial_chars
-    email_raw    = "and&re$la*+r-a.o'rea=l~ly@tenderlovemaking.com"
+    email_raw = "andre$la*+r-a.o'rea=l~ly@tenderlovemaking.com"
+    email_raw_encoded = ERB::Util.url_encode("andre$la*+r-a.o'rea=l~ly@tenderlovemaking.com").gsub("%40", "@")
     email_sanitized = if Rails.version =~ /^3/
       # mail_to changed the number base it rendered HTML encoded characters at some point
-      "and&amp;re$la*+r-a.o&#x27;rea=l~ly@tenderlovemaking.com"
+      "andre$la*+r-a.o&#x27;rea=l~ly@tenderlovemaking.com"
     else
-      "and&amp;re$la*+r-a.o&#39;rea=l~ly@tenderlovemaking.com"
+      "andre$la*+r-a.o&#39;rea=l~ly@tenderlovemaking.com"
     end
-    email_result = %{<a href="mailto:#{email_raw}">#{email_sanitized}</a>}
+    email_result = %{<a href="mailto:#{email_raw_encoded}">#{email_sanitized}</a>}
+
     assert_equal email_result, auto_link(email_raw)
     assert !auto_link_email_addresses(email_result).html_safe?, 'should not be html safe'
   end
@@ -194,7 +196,7 @@ class TestRailsAutolink < Minitest::Test
     email_result = %{<a href="mailto:#{email_raw}">#{email_raw}</a>}
     link_raw     = 'http://www.rubyonrails.com'
     link_result  = generate_result(link_raw)
-    link_result_with_options = %{<a href="#{link_raw}" target="_blank">#{link_raw}</a>}
+    link_result_with_options = %{<a target="_blank" href="#{link_raw}">#{link_raw}</a>}
 
     assert_equal '', auto_link(nil)
     assert_equal '', auto_link('')
@@ -212,7 +214,7 @@ class TestRailsAutolink < Minitest::Test
     assert_equal %(#{link_result} #{link_result}), auto_link(%(#{link_result} #{link_raw}))
 
     email2_raw    = '+david@loudthinking.com'
-    email2_result = %{<a href="mailto:#{email2_raw}">#{email2_raw}</a>}
+    email2_result = %{<a href="mailto:%2Bdavid@loudthinking.com">#{email2_raw}</a>}
     assert_equal email2_result, auto_link(email2_raw)
     assert_equal email2_result, auto_link(email2_raw, :all)
     assert_equal email2_result, auto_link(email2_raw, :email_addresses)
@@ -347,13 +349,9 @@ class TestRailsAutolink < Minitest::Test
   end
 
   private
-  def generate_result(link_text, href = nil, escape = false)
+  def generate_result(link_text, href = nil)
     href ||= link_text
-    if escape
-      %{<a href="#{CGI::escapeHTML href}">#{CGI::escapeHTML link_text}</a>}
-    else
-      %{<a href="#{href}">#{link_text}</a>}
-    end
+    %{<a href="#{CGI::escapeHTML href}">#{CGI::escapeHTML link_text}</a>}.gsub("&#39;", "'") # ActionView does not escape '
   end
 
   # from ruby core
