@@ -1,3 +1,11 @@
+=== 1.1.7 / 2022-11-02
+
+* Require a word part after “www.” when auto linking #75
+* Include trailing hyphens in URL #74
+* Make test suite work under Rails 7 #72
+* Optimize email address parsing #63
+* Switch to MiniTest 5 #48
+
 === 1.1.6 / 2014-06-08
 
 * Fixed a potential XSS vulnerability #47
