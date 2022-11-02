@@ -315,6 +315,7 @@ class TestRailsAutolink < Minitest::Test
       http://of.openfoundry.org/projects/492/download#4th.Release.3
       http://maps.google.co.uk/maps?f=q&q=the+london+eye&ie=UTF8&ll=51.503373,-0.11939&spn=0.007052,0.012767&z=16&iwloc=A
       http://около.кола/колокола
+      https://123domain.com https://123.com https://123.domain.com https://www.123.domain.com
     )
 
     urls.each do |url|
@@ -368,6 +369,10 @@ class TestRailsAutolink < Minitest::Test
         assert_equal input, auto_link(input)
       end
     end
+  end
+
+  def test_auto_link_with_www_in_non_url_string
+    assert_equal "awww.", auto_link("awww.")
   end
 
   private
