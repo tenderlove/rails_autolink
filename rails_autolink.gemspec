@@ -9,6 +9,13 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/tenderlove/rails_autolink'
   s.summary =  'Automatic generation of html links in texts'
   s.description = 'This is an extraction of the `auto_link` method from rails. The `auto_link` method was removed from Rails in version Rails 3.1. This gem is meant to bridge the gap for people migrating.'
+  s.metadata = {
+    'bug_tracker_uri' => "#{s.homepage}/issues",
+    'changelog_uri' => "#{s.homepage}/blob/v#{s.version}/CHANGELOG.rdoc",
+    'documentation_uri' => "https://www.rubydoc.info/gems/#{s.name}/#{s.version}",
+    'homepage_uri' => s.homepage,
+    'source_code_uri' => "#{s.homepage}/tree/v#{s.version}"
+  }
 
   rails_constraint = '> 3.1'
   s.add_dependency 'actionview', rails_constraint
