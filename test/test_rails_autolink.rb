@@ -9,7 +9,7 @@ require 'active_support/core_ext'
 require 'action_pack'
 require 'action_view'
 require 'action_view/helpers'
-require 'action_dispatch/testing/assertions'
+require 'rails/dom/testing/assertions'
 require 'timeout'
 require "rails_autolink/helpers"
 
@@ -20,7 +20,7 @@ class TestRailsAutolink < Minitest::Test
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::UrlHelper
   include ActionView::Helpers::OutputSafetyHelper
-  include ActionDispatch::Assertions::DomAssertions
+  include Rails::Dom::Testing::Assertions
 
   def test_auto_link_within_tags
     link_raw    = 'http://www.rubyonrails.org/images/rails.png'
