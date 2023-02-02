@@ -17,5 +17,9 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
   s.license = 'MIT'
 
-  s.files = Dir.glob("{test,lib/**/*}") + `git ls-files -z`.split("\0")
+  s.files = Dir.chdir(__dir__) do
+    `git ls-files -z`.split("\x0").select do |file|
+      file.start_with?('lib', 'CHANGELOG', 'LICENSE', 'README')
+    end
+  end
 end
