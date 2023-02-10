@@ -92,6 +92,7 @@ module RailsAutolink
             text.gsub(AUTO_LINK_RE) do
               scheme, href = $1, $&
               punctuation = []
+              trailing_gt = ""
 
               if auto_linked?($`, $')
                 # do not change string; URL is already linked
@@ -106,6 +107,9 @@ module RailsAutolink
                   end
                 end
 
+                # don't include trailing &gt; entities as part of the URL
+                trailing_gt = $& if href.sub!(/&gt;$/, '')
+
                 link_text = block_given?? yield(href) : href
                 href = 'http://' + href unless scheme
 
@@ -113,7 +117,7 @@ module RailsAutolink
                   link_text = sanitize(link_text)
                   href      = sanitize(href)
                 end
-                content_tag(:a, link_text, link_attributes.merge('href' => href), !!options[:sanitize]) + punctuation.reverse.join('')
+                content_tag(:a, link_text, link_attributes.merge('href' => href), !!options[:sanitize]) + punctuation.reverse.join('') + trailing_gt.html_safe
               end
             end
           end
