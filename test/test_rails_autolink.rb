@@ -42,6 +42,11 @@ class TestRailsAutolink < Minitest::Test
     link3_result = generate_result(link3_raw)
     assert_equal link3_result, auto_link(link3_raw)
     assert_equal "{link: #{link3_result}}", auto_link("{link: #{link3_raw}}")
+
+    link4_raw = 'http://en.wikipedia.org/wiki/Sprite_{computer_graphics}'
+    link4_result = generate_result(link4_raw)
+    assert_equal link4_result, auto_link(link4_raw)
+    assert_equal "&lt;link: #{link4_result}&gt;", auto_link("&lt;link: #{link4_raw}&gt;")
   end
 
   def test_auto_link_with_options_hash
