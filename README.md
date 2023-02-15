@@ -62,5 +62,3 @@ end
 ## Requirements
 
 - `rails` > `3.1`
-
-

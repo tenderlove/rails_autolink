@@ -1,10 +1,8 @@
-### 1.1.7 / 2022-11-02
+### 1.1.8 / 2023-02-15
 
-- Require a word part after “www.” when auto linking #75
-- Include trailing hyphens in URL #74
-- Make test suite work under Rails 7 #72
-- Optimize email address parsing #63
-- Switch to MiniTest 5 #48
+- Don’t include trailing &gt; in auto linked URL #81
+- Remove unneeded files from the gem package #80
+- Reduce Rails dependencies #79
 
 
 ### 1.1.6 / 2014-06-08
@@ -19,7 +17,6 @@
 ### 1.1.5 / 2013-10-23
 
 - Improved performance of email regex
-
 - Protocol regex is case insensitive
 
 
@@ -61,8 +58,4 @@
 ### 1.0.0 / 2011-05-02
 
 - 1 major enhancement
-
-  - Birthday!
-
-
-
+- Birthday!
