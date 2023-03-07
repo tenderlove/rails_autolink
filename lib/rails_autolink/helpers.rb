@@ -94,8 +94,8 @@ module RailsAutolink
               punctuation = []
               trailing_gt = ""
 
-              if auto_linked?($`, $')
-                # do not change string; URL is already linked
+              if auto_linked?($`, $') || href.match(options[:ignore])
+                # do not change string; URL is already linked or ignored
                 href
               else
                 # don't include trailing punctuation character as part of the URL
