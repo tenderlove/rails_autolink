@@ -55,6 +55,19 @@ class TestRailsAutolink < Minitest::Test
                 :link => :all, :html => { :class => "menu", :target => "_blank" })
   end
 
+  def test_auto_www_link_with_idn
+    domains = %w(
+      www.rammstein.tube
+      www.grå.org
+      www.सार्वभौमिक-स्वीकृति-परीक्षण.संगठन
+    )
+
+    domains.each do |domain|
+      assert_equal "Welcome to my new blog at <a href=\"http://#{domain}\">#{domain}</a>.",
+        auto_link("Welcome to my new blog at #{domain}.")
+    end
+  end
+
   def test_auto_link_with_multiple_trailing_punctuations
     url = "http://youtube.com"
     url_result = generate_result(url)
@@ -320,6 +333,7 @@ class TestRailsAutolink < Minitest::Test
       http://maps.google.co.uk/maps?f=q&q=the+london+eye&ie=UTF8&ll=51.503373,-0.11939&spn=0.007052,0.012767&z=16&iwloc=A
       http://около.кола/колокола
       https://123domain.com https://123.com https://123.domain.com https://www.123.domain.com
+      https://grå.org https://rammstein.tube https://https://सार्वभौमिक-स्वीकृति-परीक्षण.संगठन
     )
 
     urls.each do |url|
