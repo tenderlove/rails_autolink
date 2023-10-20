@@ -70,8 +70,10 @@ module RailsAutolink
 
         private
 
+          WORD_PATTERN = RUBY_VERSION < '1.9' ? '\w' : '\p{Word}'
+
           AUTO_LINK_RE = %r{
-              (?: ((?:ed2k|ftp|http|https|irc|mailto|news|gopher|nntp|telnet|webcal|xmpp|callto|feed|svn|urn|aim|rsync|tag|ssh|sftp|rtsp|afs|file):)// | www\.\w )
+              (?: ((?:ed2k|ftp|http|https|irc|mailto|news|gopher|nntp|telnet|webcal|xmpp|callto|feed|svn|urn|aim|rsync|tag|ssh|sftp|rtsp|afs|file):)// | www\.#{WORD_PATTERN} )
               [^\s<\u00A0"]+
             }ix
 
@@ -82,8 +84,6 @@ module RailsAutolink
           AUTO_EMAIL_RE = /(?<!#{AUTO_EMAIL_LOCAL_RE})[\w.!#\$%+-]\.?#{AUTO_EMAIL_LOCAL_RE}*@[\w-]+(?:\.[\w-]+)+/
 
           BRACKETS = { ']' => '[', ')' => '(', '}' => '{' }
-
-          WORD_PATTERN = RUBY_VERSION < '1.9' ? '\w' : '\p{Word}'
 
           # Turns all urls into clickable links.  If a block is given, each url
           # is yielded and the result is used as the link text.
